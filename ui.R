@@ -41,17 +41,102 @@ dashboardPage(
                     )
             ),
             
-            # Second tab content
+            # Search Content
             tabItem(tabName = "search",
-                    h2("Search"),
-                    selectizeInput(inputId = "search_time_view", label =  "Select View", choices = c("weekly", "monthly", "yearly")),
-                    dateRangeInput('search_dateRange',
-                                   label = 'Filter by Date',
-                                   start = search_min_date,
-                                   end = search_max_date
+                    fluidPage(
+                        titlePanel("Basic DataTable"),
+                    # tabBox(
+                        # Title can include an icon
+                        #title = "Search",
+                        #side = "right",
+      
+                        # tabPanel("Tab1",
+                        #          "Currently selected tab from first box:",
+                        #          h2("Search"),
+                        #          selectizeInput(inputId = "search_time_view", label =  "Select View", choices = c("weekly", "monthly", "yearly")),
+                        #          dateRangeInput('search_dateRange',
+                        #                         label = 'Filter by Date',
+                        #                         start = search_min_date,
+                        #                         end = search_max_date
+                        #          ),
+                        #          plotOutput("search")
+                        # ),
+                    
+                    
+                        # tabPanel("Raw Data", "Tab content 2",
+
+                                fluidRow(
+                                    column(4,
+                                           dateRangeInput('search_dateRange',
+                                                          label = 'Filter by Date',
+                                                          start = search_min_date,
+                                                          end = search_max_date
+                                           )
+                                    ),
+                                    column(4,
+                                           sliderInput("inSlider2", "Slider input 2:",
+                                                       min = 1, max = 100, value = c(1, 100))
+                                    )
+
+                                    
+                                    
+                                ),
+                    fluidRow(
+                        column(4,
+                               selectizeInput("search_input_local",
+                                              "Local:",
+                                              c("All",
+                                                unique(as.character(searches$local))),
+                                              selected = "All" ,
+                                              # size = 3,
+                                              multiple = T)
+                        ),
+                        column(4,
+                               selectInput("search_input_disciplina",
+                                           "Disciplina:",
+                                           c("All",
+                                             unique(as.character(searches$disciplina))),
+                                           selected = "All" ,
+                                           multiple = T)
+                        ),
+                        column(4,
+                               selectInput("search_input_ip",
+                                           "IP:",
+                                           c("All",
+                                             unique(as.character(searches$IP))),
+                                           selected = "All" ,
+                                           multiple = T)
+                        )
+                        
                     ),
-                    plotOutput("search"),
-                    dataTableOutput("search_datatable")
+                    
+                                 # Create a new row for the table.
+                                  fluidRow(
+                                      tabsetPanel(
+                                          tabPanel("Tab1",
+                                                  
+                                                   selectizeInput(inputId = "search_time_view", label =  "Select View", choices = c("weekly", "monthly", "yearly")),
+                                                   plotOutput("search")
+                                          ),
+                                          
+                                          
+                                          tabPanel("Raw Data", 
+                                                   dataTableOutput("search_datatable")
+                                                   )
+                                          
+                                      )
+                                    
+                                      # dataTableOutput("search_ip")
+                                  )
+                                 
+                                 
+                                  #dataTableOutput("search_datatable")
+                                  # )
+                    # )
+                    )
+                    
+                    
+
             ),
             tabItem(tabName = "backoffice",
                     h2("Back Office"),

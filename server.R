@@ -28,8 +28,37 @@ function(input, output, session) {
              ylab = "Number of sessions with Search")
     })
     
-    output$search_datatable <- renderDataTable({searches[, c( "date", "local", "disciplina", "IP", "nr_resultados")]})
+    search_data <- reactive({
+        if("All" %in% input$search_input_local)
+            searches_locals <- unique(searches$local)
+        else
+            searches_locals <- input$search_input_local
+        if("All" %in% input$search_input_disciplina)
+            searches_disciplinas <- unique(searches$disciplina)
+        else
+            searches_disciplinas <- input$search_input_disciplina
+        if("All" %in% input$search_input_ip)
+            searches_ips <- unique(searches$IP)
+        else
+            searches_ips <- input$search_input_ip
+        
+        
+        searches[  searches$local %in% searches_locals  &   searches$disciplina %in% searches_disciplinas  & searches$IP %in% searches_ips   , c( "date", "local", "disciplina", "IP", "nr_resultados")]
+        
+    })
+    
+    output$search_datatable <- renderDataTable({search_data()})
+    
+    # output$search_local <- renderTable({unique(searches$local)})
+    # output$search_disciplina <- renderTable({unique(searches$disciplina)})
+    # output$search_ip <- renderTable({unique(searches$IP)})
+    
+    
+    
     output$backofficetable <- renderDataTable({backoffice})
+    
+    
+    
 
     
     
